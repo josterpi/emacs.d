@@ -1,3 +1,10 @@
+;; Suppress the welcome screen
+(setq inhibit-startup-message t)
+
+;; Don't show the tool bar
+(tool-bar-mode -1)
+
+;; Use my latest version of python-mode
 (setq py-install-directory "~/.emacs.d/python-mode.el-6.1.2")
 (add-to-list 'load-path py-install-directory)
 (require 'python-mode)
