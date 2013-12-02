@@ -1,8 +1,13 @@
+
+(defvar mswindows-p (string-match "windows" (symbol-name system-type)))
+(defvar linux-p (string-match "linux" (symbol-name system-type)))
+
 ;; Suppress the welcome screen
 (setq inhibit-startup-message t)
 
 ;; Don't show the tool bar
-(tool-bar-mode -1)
+(when (display-graphic-p)
+  (tool-bar-mode -1))
 
 ;; Use my latest version of python-mode
 (setq py-install-directory "~/.emacs.d/python-mode.el-6.1.2")
@@ -23,6 +28,9 @@
 ;(setq-default py-shell-name "ipython")
 ;(setq-default py-which-bufname "IPython")
 
+;; Use my local org-mode
+(add-to-list 'load-path "~/.emacs.d/org-8.2.3c/lisp")
+(add-to-list 'load-path "~/.emacs.d/org-8.2.3c/contrib/lisp")
 ; Set up some stuff for org-mode
 (require 'org-install)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -37,8 +45,9 @@
 (setq-default org-startup-indented t)
 
 ; Use the default web browser
-(setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "gnome-www-browser")
+(when linux-p
+  (setq browse-url-browser-function 'browse-url-generic
+	browse-url-generic-program "gnome-www-browser"))
 
 ;; (custom-set-faces
 ;;   ;; custom-set-faces was added by Custom.
