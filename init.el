@@ -40,6 +40,10 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "gnome-www-browser")
 
+;; Set up Org-mode Capture
+(setq org-default-notes-file (concat org-directory "~/gtd.org"))
+(define-key global-map "\C-cc" 'org-capture)
+
 ;; (custom-set-faces
 ;;   ;; custom-set-faces was added by Custom.
 ;;   ;; If you edit it by hand, you could mess it up, so be careful.
