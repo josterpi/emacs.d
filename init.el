@@ -5,6 +5,9 @@
 ;; Suppress the welcome screen
 (setq inhibit-startup-message t)
 
+(setq abbrev-file-name             ;; tell emacs where to read abbrev
+      "~/.emacs.d/abbrev_defs")    ;; definitions from...
+
 ;; Don't show the tool bar
 (when (display-graphic-p)
   (tool-bar-mode -1))
