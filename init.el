@@ -82,9 +82,15 @@
              "* %U\n%?")))
 
 ;; http://nflath.com/2010/03/org-mode-2/
-(setq org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
+;; (setq org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
 (setq org-insert-heading-respect-content t)
 (setq org-return-follows-link t)
+
+;; for Org-Mobile
+(setq org-mobile-directory "~/Dropbox/org")
+;; Don't add id properties to things
+(setq org-mobile-force-id-on-agenda-items nil)
+
 
 ;; virtual indentation according to outline level. by default
 (setq-default org-startup-indented t)
@@ -99,12 +105,20 @@
   (let ((default-directory (file-name-directory (buffer-file-name)))
 	(system (downcase (system-name)))
 	)
-    (process-file "git" nil nil "commit" "-a" (format "-m'commit from %s'" system))
-    (process-file "git" nil nil "pull")
-    (process-file "git" nil nil "push")
+    (process-file "git" nil "*Messages*" "commit" "-a" (format "-m'commit from %s'" system))
+    (process-file "git" nil "*Messages*" "pull")
+    (process-file "git" nil "*Messages*" "push")
   )
 )
-;(process-file "git" nil "*Messages*" "pull")
+(process-file "git" nil "*Messages*" nil "pull")
+
+;; Lilypond
+(autoload 'LilyPond-mode "lilypond-mode")
+(setq auto-mode-alist
+      (cons '("\\.ly$" . LilyPond-mode) auto-mode-alist))
+
+(add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
+
 ;; (custom-set-faces
 ;;   ;; custom-set-faces was added by Custom.
 ;;   ;; If you edit it by hand, you could mess it up, so be careful.
