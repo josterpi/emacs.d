@@ -39,7 +39,8 @@
 (require 'org-install)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-ca" 'org-agenda
+)
 (setq org-log-done t)
 ;; Save clock history across Emacs sessions
 (setq org-clock-persist 'history)
@@ -93,6 +94,17 @@
   (setq browse-url-browser-function 'browse-url-generic
 	browse-url-generic-program "gnome-www-browser"))
 
+(defun my-git-sync ()
+  (interactive)
+  (let ((default-directory (file-name-directory (buffer-file-name)))
+	(system (downcase (system-name)))
+	)
+    (process-file "git" nil nil "commit" "-a" (format "-m'commit from %s'" system))
+    (process-file "git" nil nil "pull")
+    (process-file "git" nil nil "push")
+  )
+)
+;(process-file "git" nil "*Messages*" "pull")
 ;; (custom-set-faces
 ;;   ;; custom-set-faces was added by Custom.
 ;;   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -101,14 +113,14 @@
 ;;  '(default ((t (:inherit nil :stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
 ;; 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(org-agenda-files (quote ("~/org/house.org" "~/org/gtd.org"))))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files (quote ("~/org/personal.org" "~/org/work.org" "~/org/house.org" "~/org/gtd.org"))))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
