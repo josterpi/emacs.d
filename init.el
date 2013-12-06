@@ -100,17 +100,19 @@
   (setq browse-url-browser-function 'browse-url-generic
 	browse-url-generic-program "gnome-www-browser"))
 
+(defun my-call-git (&rest args)
+  (apply 'process-file "git" nil "*Git Output*" nil args))
+
 (defun my-git-sync ()
   (interactive)
   (let ((default-directory (file-name-directory (buffer-file-name)))
 	(system (downcase (system-name)))
 	)
-    (process-file "git" nil "*Messages*" "commit" "-a" (format "-m'commit from %s'" system))
-    (process-file "git" nil "*Messages*" "pull")
-    (process-file "git" nil "*Messages*" "push")
+    (my-call-git "commit" "-a" (format "-m'commit from %s'" system))
+    (my-call-git "pull")
+    (my-call-git "push")
   )
 )
-(process-file "git" nil "*Messages*" nil "pull")
 
 ;; Lilypond
 (autoload 'LilyPond-mode "lilypond-mode")
