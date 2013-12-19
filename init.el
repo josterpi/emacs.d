@@ -94,6 +94,13 @@
   (setq browse-url-browser-function 'browse-url-generic
 	browse-url-generic-program "gnome-www-browser"))
 
+; On windows, set up paths to get git to work
+(when mswindows-p
+  (setq explicit-shell-file-name
+      "C:/Program Files (x86)/Git/bin/bash.exe")
+  (setq shell-file-name explicit-shell-file-name)
+  (add-to-list 'exec-path "C:/Program Files (x86)/Git/bin"))
+
 (defun my-git-sync ()
   (interactive)
   (let ((default-directory (file-name-directory (buffer-file-name)))
