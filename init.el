@@ -5,6 +5,10 @@
 ;; Suppress the welcome screen
 (setq inhibit-startup-message t)
 
+(require 'package)
+(setq package-enable-at-startup nil)
+(package-initialize)
+
 (setq abbrev-file-name             ;; tell emacs where to read abbrev
       "~/.emacs.d/abbrev_defs")    ;; definitions from...
 
@@ -16,6 +20,10 @@
 (setq py-install-directory "~/.emacs.d/python-mode.el-6.1.2")
 (add-to-list 'load-path py-install-directory)
 (require 'python-mode)
+
+(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+(autoload 'csv-mode "csv-mode"
+  "Major mode for editing comma-separated value files." t)
 
 ;(setq
 ; python-shell-interpreter-args "-colors NoColor"
@@ -105,6 +113,7 @@
   (setq explicit-shell-file-name
       "C:/Program Files (x86)/Git/bin/bash.exe")
   (setq shell-file-name explicit-shell-file-name)
+  (setq default-directory "C:/Users/josterhouse.DOMAIN/AppData/Roaming" )
   (add-to-list 'exec-path "C:/Program Files (x86)/Git/bin"))
 
 (defun my-call-git (&rest args)
@@ -140,7 +149,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files (quote ("~/org/personal.org" "~/org/work.org" "~/org/house.org" "~/org/gtd.org"))))
+ '(csv-separators (quote ("," "|")))
+ '(org-agenda-files
+   (quote
+    ("~/org/personal.org" "~/org/work.org" "~/org/house.org" "~/org/gtd.org"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
