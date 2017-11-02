@@ -95,7 +95,7 @@
 (setq org-return-follows-link t)
 
 ;; for Org-Mobile
-(setq org-mobile-directory "~/Dropbox/org")
+(setq org-mobile-directory "~/../../Dropbox/org")
 ;; Don't add id properties to things
 (setq org-mobile-force-id-on-agenda-items nil)
 
@@ -113,7 +113,8 @@
   (setq explicit-shell-file-name
       "C:/Program Files (x86)/Git/bin/bash.exe")
   (setq shell-file-name explicit-shell-file-name)
-  (setq default-directory "C:/Users/josterhouse.DOMAIN/AppData/Roaming" )
+  ;(setq default-directory (concat (file-name-as-directory (getenv "UserProfile")) "AppData/Roaming" ))
+  (setq default-directory (getenv "UserProfile"))
   (add-to-list 'exec-path "C:/Program Files (x86)/Git/bin"))
 
 (defun my-call-git (&rest args)
