@@ -73,6 +73,7 @@
 ;; (require 'python-mode)
 
 (defun jo/python-shell-send-line-and-next ()
+  "Send a line of code to the shell and advance to the next line"
   (interactive)
   (let (start end)
     (save-excursion
@@ -87,8 +88,18 @@
 	(comint-send-input)))
     (next-line)))
 
-(eval-after-load "python-mode"
-  '(define-key python-mode-map (kbd "<C-return>") 'jo/python-shell-send-line-and-next))
+(add-hook 'python-mode-hook
+	  #'(lambda ()
+	      (define-key python-mode-map (kbd "<C-return>") 'jo/python-shell-send-line-and-next)))
+
+;; (defun jo/test () ;; use Elisp to run something in an R command and get the results
+;;   (interactive) ;; Ultimately, I want completion in piped expressions
+;;   (let ((proc (ess-get-next-available-process)))
+;;     (let ((buf (get-buffer-create " *ess-command-output*")))
+;;       (with-current-buffer (process-buffer proc)
+;; 	(ess-command "names(intran)\n" buf))
+;;       (with-current-buffer buf
+;; 	(kill-ring-save (point-min) (point-max))))))
 
 (add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 (autoload 'csv-mode "csv-mode"
