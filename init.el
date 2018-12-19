@@ -73,11 +73,11 @@
 ;; (require 'python-mode)
 
 (defun jo/python-shell-send-line-and-next ()
-  "Send a line of code to the shell and advance to the next line"
+  "Send a line of code to the shell and advance to the next line, ignoring indentation"
   (interactive)
   (let (start end)
     (save-excursion
-      (move-beginning-of-line nil)
+      (back-to-indentation)
       (setq start (point))
       (move-end-of-line nil)
       (setq end (point))
@@ -86,6 +86,7 @@
 	(end-of-buffer)
         (yank)
 	(comint-send-input)))
+    (move-end-of-line nil)
     (next-line)))
 
 (add-hook 'python-mode-hook
