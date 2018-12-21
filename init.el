@@ -315,11 +315,25 @@
 (setq ispell-program-name "hunspell")
 
 ;; IDO
-(require 'ido)
-(ido-mode t)
+;; (require 'ido)
+;; (ido-mode t)
+;; (setq ido-create-new-buffer 'always) ; Don't ask for confirmation
 
-;; Globally enable hi-lock mode. M-s h . to highlight symbol found near point. M-s h u to unhighlight something
+;; Done with IDO for now. Let's try Ivy
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "(%d/%d) ")
+(setq counsel-find-file-ignore-regexp "\\.R~\\'")
+
+;; emmet-mode for amazing html and css
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+
+;; Globally Enable hi-lock mode. M-s h . to highlight symbol found near point. M-s h u to unhighlight something
 (global-hi-lock-mode 1)
+
+;; Enable company-mode everywhere
+(add-hook 'after-init-hook 'global-company-mode)
 
 ;; jump-char: like f and F in vim
 (global-set-key (kbd "M-m") 'jump-char-forward)
@@ -354,7 +368,7 @@
     ("~/org/personal.org" "~/org/work.org" "~/org/house.org" "~/org/inbox.org")))
  '(package-selected-packages
    (quote
-    (ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
+    (emmet-mode ivy ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
  '(py-python2-command "C:/Python27/python")
  '(py-python3-command "C:/Python36/python")
  '(py-shell-toggle-2 "C:/Python36/python")
@@ -364,7 +378,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Hack" :foundry "outline" :slant normal :weight normal :height 98 :width normal)))))
+ '(default ((t (:family "Hack" :foundry "outline" :slant normal :weight normal :height 98 :width normal))))
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 (put 'narrow-to-region 'disabled nil)
 
 ;; ACE jump and window settings
@@ -373,6 +388,4 @@
 (global-set-key (kbd "M-o") 'other-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)) ;; Use the home row for ace-window
 (setq aw-ignore-current t) ;; Don't have me jump to the window I'm in
-(custom-set-faces
- '(aw-leading-char-face
-   ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+
