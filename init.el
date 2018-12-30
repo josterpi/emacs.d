@@ -15,6 +15,16 @@
 (global-set-key (kbd "<home>") 'back-to-indentation-or-beginning)
 (global-set-key (kbd "C-a") 'back-to-indentation-or-beginning)
 
+;; Don't litter my hard drive with backup files
+(setq
+ backup-by-copying t			; don't clobber symlinks
+ backup-directory-alist
+ '(("." . "~/.emacs.d/saves/"))		; don't litter my fs tree
+ delete-old-versions t
+ kept-new-versions 6
+ kept-old-versions 2
+ version-control t)			; use versioned backups
+
 ;; https://www.emacswiki.org/emacs/ShowParenMode
 (show-paren-mode 1)
 
