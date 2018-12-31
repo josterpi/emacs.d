@@ -39,23 +39,44 @@
 ;; Suppress the welcome screen
 (setq inhibit-startup-message t)
 
-;; Set up initial frame size
+(defmacro set-initial-dimensions (height-lines)
+  `(setq initial-frame-alist
+        '(
+          (tool-bar-lines . 0)
+          (width . 106) ; chars
+          (height . ,height-lines) ; lines
+          (left . 50)
+          (top . 0)))
+  `(setq default-frame-alist
+        '(
+          (tool-bar-lines . 0)
+          (width . 106)
+          (height . ,height-lines)
+          (left . 50)
+          (top . 0))))
+
 (if (display-graphic-p)
-    (progn
-      (setq initial-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 106) ; chars
-              (height . 65) ; lines
-              (left . 50)
-              (top . 0)))
-      (setq default-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 106)
-              (height . 65)
-              (left . 50)
-              (top . 0)))))
+    (if (string= (system-name) "JOSTER") ; Hack to set frame height to 53 on my laptop
+	(set-initial-dimensions 53)
+      (set-initial-dimensions 65)))	; Set frame height to 65 on a 1080p monitor
+
+;; Set up initial frame size
+;; (if (display-graphic-p)
+;;     (progn
+;;       (setq initial-frame-alist
+;;             '(
+;;               (tool-bar-lines . 0)
+;;               (width . 106) ; chars
+;;               (height . 65) ; lines
+;;               (left . 50)
+;;               (top . 0)))
+;;       (setq default-frame-alist
+;;             '(
+;;               (tool-bar-lines . 0)
+;;               (width . 106)
+;;               (height . 65)
+;;               (left . 50)
+;;               (top . 0)))))
 
 (require 'package)
 ;; (setq package-enable-at-startup nil) ;; I don't know why this was here
