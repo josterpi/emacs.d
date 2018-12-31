@@ -420,3 +420,5 @@
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)) ;; Use the home row for ace-window
 (setq aw-ignore-current t) ;; Don't have me jump to the window I'm in
 
+;; Magit
+(global-set-key (kbd "C-x g") 'magit-status)
