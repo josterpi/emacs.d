@@ -15,6 +15,14 @@
 (global-set-key (kbd "<home>") 'back-to-indentation-or-beginning)
 (global-set-key (kbd "C-a") 'back-to-indentation-or-beginning)
 
+;; http://ergoemacs.org/emacs/emacs_hyper_super_keys.html
+;; make PC keyboard's Win key or other to type Super or Hyper, for emacs running on Windows.
+(setq w32-pass-lwindow-to-system nil)
+(setq w32-lwindow-modifier 'super) ; Left Windows key
+
+(setq w32-pass-rwindow-to-system nil)
+(setq w32-rwindow-modifier 'super) ; Right Windows key
+
 ;; Don't litter my hard drive with backup files
 (setq
  backup-by-copying t			; don't clobber symlinks
@@ -151,17 +159,14 @@
 ;(setq-default py-shell-name "ipython")
 ;(setq-default py-which-bufname "IPython")
 
-;; Use my local org-mode
-;;(add-to-list 'load-path "~/.emacs.d/org-8.2.3c/lisp")
-;;(add-to-list 'load-path "~/.emacs.d/org-8.2.3c/contrib/lisp")
-
 ; Set up some stuff for org-mode
 (setq org-export-backends (quote (ascii html latex icalendar md)))
 (require 'org-install)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
+;;(define-key global-map "\C-ca" 'org-agenda)
+(global-set-key (kbd "<f12>") 'org-agenda)
 
 (setq org-log-done t)
 ;; Save clock history across Emacs sessions
@@ -182,6 +187,8 @@
 ;; provide refile targets as paths, including the file name
 ;; (without directory) as level 1 of the path
 (setq org-refile-use-outline-path 'file)
+
+(setq org-outline-path-complete-in-steps nil)
 
 ;; allow to create new nodes (must be confirmed by the user) as
 ;; refile targets
@@ -310,6 +317,8 @@
   ;;(setq shell-file-name explicit-shell-file-name)
   ;(setq default-directory (concat (file-name-as-directory (getenv "UserProfile")) "AppData/Roaming" ))
   (setq default-directory (getenv "UserProfile"))
+  (setenv "GIT_ASKPASS" "git-gui--askpass") ;; Use GUI to ask for credentials
+  (setenv "SSH_ASKPASS" "git-gui--askpass") ;; Use GUI to ask for SSH key credentials
   ;;(add-to-list 'exec-path "C:/Program Files (x86)/Git/bin")
 )
 
@@ -406,7 +415,7 @@
     ("~/org/personal.org" "~/org/work.org" "~/org/house.org" "~/org/inbox.org")))
  '(package-selected-packages
    (quote
-    (projectile markdown-mode emmet-mode ivy ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
+    (ssh-agency projectile markdown-mode emmet-mode ivy ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
  '(py-python2-command "C:/Python27/python")
  '(py-python3-command "C:/Python36/python")
  '(py-shell-toggle-2 "C:/Python36/python")
