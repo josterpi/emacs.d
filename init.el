@@ -386,6 +386,11 @@
 (global-set-key (kbd "M-m") 'jump-char-forward)
 (global-set-key (kbd "M-M") 'jump-char-backward)
 
+;; hide extraneous info from dired. Show/hide with '(' and ')'
+(require 'dired-details)
+(dired-details-install)
+(setq dired-details-hidden-string "")
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
