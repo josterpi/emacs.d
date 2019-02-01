@@ -415,7 +415,7 @@
     ("~/org/personal.org" "~/org/work.org" "~/org/house.org" "~/org/inbox.org")))
  '(package-selected-packages
    (quote
-    (ssh-agency projectile markdown-mode emmet-mode ivy ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
+    (ledger-mode ssh-agency projectile markdown-mode emmet-mode ivy ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
  '(py-python2-command "C:/Python27/python")
  '(py-python3-command "C:/Python36/python")
  '(py-shell-toggle-2 "C:/Python36/python")
