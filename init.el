@@ -322,19 +322,15 @@
   ;;(add-to-list 'exec-path "C:/Program Files (x86)/Git/bin")
 )
 
-(defun my-call-git (&rest args)
-  (apply 'process-file "git" nil "*Git Output*" nil args))
-
-(defun my-git-sync ()
+(defun jo/git-sync ()
+  "For use with org to synchronize to git repo"
   (interactive)
-  (let ((default-directory (file-name-directory (buffer-file-name)))
-	(system (downcase (system-name)))
-	)
-    (my-call-git "commit" "-a" (format "-m'commit from %s'" system))
-    (my-call-git "pull")
-    (my-call-git "push")
-  )
-)
+  (let ((system (downcase (system-name))))
+    ;; If git status is not blank, then commit all changed files
+    (if (magit-git-string "status" "-s" "-uno") ; -s(hort) -uno (no unstaged files)
+	(magit-run-git "commit" "-a" (format "--message='%s'" system)))
+    (magit-pull-from-upstream nil)
+    (magit-push-current-to-upstream nil)))
 
 ;; Lilypond
 (autoload 'LilyPond-mode "lilypond-mode")
