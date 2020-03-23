@@ -1,3 +1,4 @@
+
 (defvar mswindows-p (string-match "windows" (symbol-name system-type)))
 (defvar linux-p (string-match "linux" (symbol-name system-type)))
 
@@ -145,19 +146,22 @@
 (autoload 'csv-mode "csv-mode"
   "Major mode for editing comma-separated value files." t)
 
-;(setq
-; python-shell-interpreter-args "-colors NoColor"
-; python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-; python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-; python-shell-completion-setup-code
-;   "from IPython.core.completerlib import module_completion"
-; python-shell-completion-module-string-code
-;   "';'.join(module_completion('''%s'''))\n"
-; python-shell-completion-string-code
-;   "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"
-;   )
-;(setq-default py-shell-name "ipython")
-;(setq-default py-which-bufname "IPython")
+(setq
+;; python-shell-interpreter-args "-colors NoColor"
+;; python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+;; python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+python-shell-completion-setup-code
+  "from IPython.core.completerlib import module_completion"
+python-shell-completion-module-string-code
+  "';'.join(module_completion('''%s'''))\n"
+python-shell-completion-string-code
+  "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"
+  )
+;; (setq-default py-shell-name "ipython")
+;; (setq-default py-which-bufname "IPython")
+
+(when (executable-find "ipython")
+  (setq python-shell-interpreter "ipython"))
 
 ; Set up some stuff for org-mode
 (setq org-export-backends (quote (ascii html latex icalendar md)))
@@ -416,7 +420,7 @@
     ("~/org/personal.org" "~/org/work.org" "~/org/house.org" "~/org/inbox.org")))
  '(package-selected-packages
    (quote
-    (ledger-mode ssh-agency projectile markdown-mode emmet-mode ivy ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
+    (csharp-mode ledger-mode ssh-agency projectile markdown-mode emmet-mode ivy ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
  '(py-python2-command "C:/Python27/python")
  '(py-python3-command "C:/Python36/python")
  '(py-shell-toggle-2 "C:/Python36/python")
