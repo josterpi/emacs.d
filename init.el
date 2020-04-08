@@ -349,9 +349,21 @@ python-shell-completion-string-code
 ;; ESS
 ;; (require 'ess)  ;; I think this is already enables through MELPA
 (setq ess-view--spreadsheet-program "C:/Program Files/LibreOffice 5/program/scalc.exe")
-(add-hook 'ess-mode-hook ;; Disable _ being replaced with <-
-          (lambda () 
-            (ess-toggle-underscore nil)))
+;; Actually, let's save some keypresses. Improved with ess-smart-underscore
+;; (add-hook 'ess-mode-hook ;; Disable _ being replaced with <-
+;;           (lambda ()
+;;             (ess-toggle-underscore nil)))
+
+;; H/T https://emacs.stackexchange.com/a/8055
+(defun pipe_R_operator ()
+  "R - %>% operator or 'then' pipe operator"
+  (interactive)
+  (just-one-space 1)
+  (insert "%>%")
+  ;; (reindent-then-newline-and-indent)
+  )
+(define-key ess-mode-map (kbd "C-|") 'pipe_R_operator)
+(define-key inferior-ess-mode-map (kbd "C-|") 'pipe_R_operator)
 
 ;; hunspell
 (add-to-list 'exec-path "C:/hunspell/bin/")
@@ -423,7 +435,7 @@ python-shell-completion-string-code
     ("~/org/personal.org" "~/org/work.org" "~/org/house.org" "~/org/inbox.org")))
  '(package-selected-packages
    (quote
-    (csharp-mode ledger-mode ssh-agency projectile markdown-mode emmet-mode ivy ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
+    (ess-smart-underscore csharp-mode ledger-mode ssh-agency projectile markdown-mode emmet-mode ivy ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
  '(py-python2-command "C:/Python27/python")
  '(py-python3-command "C:/Python36/python")
  '(py-shell-toggle-2 "C:/Python36/python")
