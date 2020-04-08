@@ -37,6 +37,9 @@
 ;; https://www.emacswiki.org/emacs/ShowParenMode
 (show-paren-mode 1)
 
+;; show cursor position within line
+(column-number-mode 1)
+
 ;; C-u C-space C-space to repeart popping mark instead of C-u C-space C-u C-space
 (setq set-mark-command-repeat-pop 1)
 
