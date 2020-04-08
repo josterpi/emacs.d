@@ -180,6 +180,13 @@ python-shell-completion-string-code
 (setq org-clock-persist 'history)
 (org-clock-persistence-insinuate)
 
+(when mswindows-p
+  ;; ~/docs is a symlink convention I use for command line use which
+  ;; goes to wherever my Windows Documents folder is. Currently,
+  ;; that's in OneDrive, so it's really obnoxious to navigate to on
+  ;; the CL
+  (setq org-directory "~/docs/org"))
+
 ;; Use org-habit, only because norang depends on it for now
 (add-to-list 'org-modules 'org-habit)
 
@@ -213,11 +220,11 @@ python-shell-completion-string-code
 (define-key global-map "\C-cc" 'org-capture)
 ;; org-mode capture templates
 (setq org-capture-templates
-      '(("i" "Inbox" entry (file "~/org/inbox.org")
+      '(("i" "Inbox" entry (file (concat org-directory "/inbox.org"))
              "* TODO %?\n  %U")
-	("s" "Snippet" entry (file "~/org/inbox.org")
+	("s" "Snippet" entry (file (concat org-directory "/inbox.org"))
              "* TODO %?\n  %x\n  %U")
-        ("j" "Journal" entry (file+datetree "~/org/journal.org")
+        ("j" "Journal" entry (file+datetree (concat org-directory "/journal.org"))
 	 "* %U\n%?")))
 
 ;; Custom Agenda: http://doc.norang.ca/org-mode.html#CustomAgendaViewSetup
@@ -304,7 +311,7 @@ python-shell-completion-string-code
 (setq org-return-follows-link t)
 
 ;; for Org-Mobile
-(setq org-mobile-directory "~/../../Dropbox/org")
+(setq org-mobile-directory "~/Dropbox/org")
 ;; Don't add id properties to things
 (setq org-mobile-force-id-on-agenda-items nil)
 
