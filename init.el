@@ -223,11 +223,11 @@ python-shell-completion-string-code
 (define-key global-map "\C-cc" 'org-capture)
 ;; org-mode capture templates
 (setq org-capture-templates
-      '(("i" "Inbox" entry (file (concat org-directory "/inbox.org"))
+      `(("i" "Inbox" entry (file ,(concat org-directory "/inbox.org"))
              "* TODO %?\n  %U")
-	("s" "Snippet" entry (file (concat org-directory "/inbox.org"))
+	("s" "Snippet" entry (file ,(concat org-directory "/inbox.org"))
              "* TODO %?\n  %x\n  %U")
-        ("j" "Journal" entry (file+datetree (concat org-directory "/journal.org"))
+        ("j" "Journal" entry (file+datetree ,(concat org-directory "/journal.org"))
 	 "* %U\n%?")))
 
 ;; Custom Agenda: http://doc.norang.ca/org-mode.html#CustomAgendaViewSetup
