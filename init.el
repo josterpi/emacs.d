@@ -357,7 +357,7 @@ python-shell-completion-string-code
 (add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
 
 ;; ESS
-;; (require 'ess)  ;; I think this is already enables through MELPA
+(require 'ess)  ;; I think this is already enables through MELPA
 (setq ess-view--spreadsheet-program "C:/Program Files/LibreOffice 5/program/scalc.exe")
 ;; Actually, let's save some keypresses. Improved with ess-smart-underscore
 ;; (add-hook 'ess-mode-hook ;; Disable _ being replaced with <-
