@@ -230,6 +230,12 @@ python-shell-completion-string-code
         ("j" "Journal" entry (file+datetree ,(concat org-directory "/journal.org"))
 	 "* %U\n%?")))
 
+;; Set the agenda files, concating org-directory since it's different
+;; between linux and windows
+(setq org-agenda-files
+   (mapcar '(lambda (file) (concat org-directory file))
+    '("/personal.org" "/work.org" "/house.org" "/inbox.org")))
+
 ;; Custom Agenda: http://doc.norang.ca/org-mode.html#CustomAgendaViewSetup
 (setq org-agenda-custom-commands
       (quote (("N" "Notes" tags "NOTE"

@@ -22,9 +22,6 @@
      (ess-fl-keyword:delimiters . t)
      (ess-fl-keyword:=)
      (ess-R-fl-keyword:F&T))))
- '(org-agenda-files
-   (quote
-    ("~/org/personal.org" "~/org/work.org" "~/org/house.org" "~/org/inbox.org")))
  '(package-selected-packages
    (quote
     (ess-smart-underscore csharp-mode ledger-mode ssh-agency projectile markdown-mode emmet-mode ivy ace-window restclient iedit ace-jump-mode jump-char ess-R-data-view ess-view ess company org magit csv-mode)))
