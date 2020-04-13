@@ -393,6 +393,7 @@ python-shell-completion-string-code
 ;; Projectile for projects
 (projectile-mode 1)
 ;; I don't currently have Super set up, but it could be the windows key
+;; Use AutoHotKey to set up Windows key as super
 (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 (setq projectile-completion-system 'ivy)
