@@ -369,6 +369,8 @@ python-shell-completion-string-code
 ;; (add-hook 'ess-mode-hook ;; Disable _ being replaced with <-
 ;;           (lambda ()
 ;;             (ess-toggle-underscore nil)))
+;; (define-key ess-r-mode-map "_" #'ess-insert-assign)
+;; (define-key inferior-ess-r-mode-map "_" #'ess-insert-assign)
 
 ;; H/T https://emacs.stackexchange.com/a/8055
 (defun pipe_R_operator ()
