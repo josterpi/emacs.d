@@ -383,6 +383,42 @@ python-shell-completion-string-code
 (define-key ess-mode-map (kbd "C-|") 'pipe_R_operator)
 (define-key inferior-ess-mode-map (kbd "C-|") 'pipe_R_operator)
 
+;; Rmarkdown
+(require 'poly-markdown)
+(require 'poly-R)
+(add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+
+;; H/T https://emacs.stackexchange.com/a/27419/28438
+(defun jo/insert-r-chunk ()
+  "Insert an R chunk in Rmarkdown"
+  (interactive)
+  (insert "```{r}\n\n```")
+  (forward-line -1))
+
+(defun jo/insert-rchunk-header (option)
+  "Add an R chunk header option"
+  (save-excursion
+    (search-backward "`{r")
+    (move-end-of-line 1)
+    (backward-char)
+    (insert (concat ", " option))))
+
+(defun jo/select-rchunk-header ()
+  "Using ivy, select an R chunk header option, which is then inserted"
+  (interactive)
+  (ivy-read "Chunk options: "
+	    '(("include -- prevent code & results from appearing" . "include = F")
+	      ("echo -- prevent code, but show results" . "echo = F")
+	      ("eval -- don't run the code" . "eval = F")
+	      ("cache -- cache results for future knits" . "cache = T")
+	      ("message -- prevent messages from appearing" . "message = F")
+	      ("warning -- prevent warnings from appearing" . "warning = F"))
+	    :action (lambda (x) (jo/insert-rchunk-header (cdr x)))))
+
+;; In Rmarkdown files, insert new R chunks and set their options
+(define-key poly-markdown+r-mode-map (kbd "C-c r") 'jo/insert-r-chunk)
+(define-key poly-markdown+r-mode-map (kbd "C-c h") 'jo/select-rchunk-header)
+
 ;; hunspell
 (add-to-list 'exec-path "C:/hunspell/bin/")
 (setq ispell-program-name "hunspell")
