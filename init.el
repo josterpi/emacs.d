@@ -464,6 +464,19 @@ python-shell-completion-string-code
 ;; Enable narrow-to-region, but I don't know why I'd use it :)
 (put 'narrow-to-region 'disabled nil)
 
+;; H/T https://news.ycombinator.com/item?id=22883750
+;; Handling of spaces
+(setq-default show-trailing-whitespace 't)
+;; H/T https://emacs.stackexchange.com/q/37069/28438
+;;There's a more robust option for this if there are multiple modes I want this for
+(add-hook 'shell-mode-hook (lambda ()
+                             (setq show-trailing-whitespace nil)))
+(setq-default indicate-empty-lines 't)
+;; try not to use tab characters ever when formatting code
+(setq-default indent-tabs-mode nil)
+(setq-default require-final-newline 'ask)
+(setq-default mode-require-final-newline 'ask)
+
 ;; ACE jump and window settings
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 (global-set-key (kbd "C-x o") 'ace-window)
