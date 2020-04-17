@@ -468,9 +468,14 @@ python-shell-completion-string-code
 ;; Handling of spaces
 (setq-default show-trailing-whitespace 't)
 ;; H/T https://emacs.stackexchange.com/q/37069/28438
-;;There's a more robust option for this if there are multiple modes I want this for
-(add-hook 'shell-mode-hook (lambda ()
-                             (setq show-trailing-whitespace nil)))
+(defun jo/hide-trailing-whitespace-maybe ()
+  "Disable 'show-trailing-whitespace' in selected modes."
+  (when (derived-mode-p 'shell-mode
+                        'comint-mode
+                        'magit-popup-mode)
+    (setq show-trailing-whitespace nil)))
+(add-hook 'after-change-major-mode-hook
+          'jo/hide-trailing-whitespace-maybe)
 (setq-default indicate-empty-lines 't)
 ;; try not to use tab characters ever when formatting code
 (setq-default indent-tabs-mode nil)
