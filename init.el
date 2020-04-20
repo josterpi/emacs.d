@@ -422,6 +422,17 @@ python-shell-completion-string-code
 (define-key poly-markdown+r-mode-map (kbd "C-c r") 'jo/insert-r-chunk)
 (define-key poly-markdown+r-mode-map (kbd "C-c h") 'jo/select-rchunk-header)
 
+;; http://ess.r-project.org/Manual/ess.html#Command-History
+;; For R and any other comint buffers: type a prefix and search for matches
+;; in the command history
+(eval-after-load "comint"
+  '(progn
+     (define-key comint-mode-map [up]
+       'comint-previous-matching-input-from-input)
+     (define-key comint-mode-map [down]
+       'comint-next-matching-input-from-input)
+     ))
+
 ;; hunspell
 (add-to-list 'exec-path "C:/hunspell/bin/")
 (setq ispell-program-name "hunspell")
