@@ -5,6 +5,19 @@
 (defvar mswindows-p (string-match "windows" (symbol-name system-type)))
 (defvar linux-p (string-match "linux" (symbol-name system-type)))
 
+;; Set up packages
+(package-initialize)
+;; Small speedup:
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html
+(setq package-enable-at-startup nil)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;; (add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  )
+
 ;; https://www.emacswiki.org/emacs/LoadPath
 (let ((default-directory  "~/.emacs.d/lisp/"))
   (normal-top-level-add-to-load-path '("."))
@@ -12,6 +25,18 @@
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
+
+;; Use Package ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(setq use-package-verbose t)
+(setq use-package-always-ensure t)
+(require 'use-package)
+;; (use-package auto-compile
+  ;; :config (auto-compile-on-load-mode))
+
+;; To hide minor mode lighters
+(use-package diminish)
 
 (load "help-init") ;; helper functions for some org-mode stuff
 
@@ -96,18 +121,6 @@
 ;;               (left . 50)
 ;;               (top . 0)))))
 
-(require 'package)
-;; (setq package-enable-at-startup nil) ;; I don't know why this was here
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                    (not (gnutls-available-p))))
-       (proto (if no-ssl "http" "https")))
-  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
-  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-  ;; (add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-  (when (< emacs-major-version 24)
-    ;; For important compatibility libraries like cl-lib
-    (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
-(package-initialize)
 
 (setq abbrev-file-name             ;; tell emacs where to read abbrev
       "~/.emacs.d/abbrev_defs")    ;; definitions from...
