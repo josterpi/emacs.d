@@ -505,3 +505,13 @@ python-shell-completion-string-code
 
 ;; Magit
 (global-set-key (kbd "C-x g") 'magit-status)
+
+;; https://www.emacswiki.org/emacs/EmacsAsDaemon#toc10
+;; define function to shutdown emacs server instance
+(defun server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs)
+  )
+
