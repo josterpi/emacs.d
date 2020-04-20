@@ -1,7 +1,4 @@
 
-;; TODO: When I C-x C-c with server running, it keeps all my buffers open
-;; https://stackoverflow.com/questions/1167484/how-to-gracefully-shutdown-emacs-daemon
-
 (defvar mswindows-p (string-match "windows" (symbol-name system-type)))
 (defvar linux-p (string-match "linux" (symbol-name system-type)))
 
@@ -527,4 +524,3 @@ python-shell-completion-string-code
   (save-some-buffers)
   (kill-emacs)
   )
-
