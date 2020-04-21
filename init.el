@@ -496,7 +496,8 @@ python-shell-completion-string-code
   "Disable 'show-trailing-whitespace' in selected modes."
   (when (derived-mode-p 'shell-mode
                         'comint-mode
-                        'magit-popup-mode)
+                        'magit-popup-mode
+                        'tabulated-list-mode)
     (setq show-trailing-whitespace nil)))
 (add-hook 'after-change-major-mode-hook
           'jo/hide-trailing-whitespace-maybe)
