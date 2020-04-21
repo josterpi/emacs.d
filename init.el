@@ -452,6 +452,13 @@ python-shell-completion-string-code
 ;; (ido-mode t)
 ;; (setq ido-create-new-buffer 'always) ; Don't ask for confirmation
 
+;; ivy is already enabling recentf for virtual buffers, but I want to
+;; increase the number of items saved and exclude org-mode archives
+(require 'recentf)
+(setq recentf-max-saved-items 100)
+(add-to-list 'recentf-exclude "\.org_archive$")
+(recentf-mode)
+
 ;; Done with IDO for now. Let's try Ivy
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
