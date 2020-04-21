@@ -367,14 +367,6 @@ python-shell-completion-string-code
 (add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
 
 ;; ESS
-(require 'ess)  ;; I think this is already enables through MELPA
-(setq ess-view--spreadsheet-program "C:/Program Files/LibreOffice 5/program/scalc.exe")
-;; Actually, let's save some keypresses. Improved with ess-smart-underscore
-;; (add-hook 'ess-mode-hook ;; Disable _ being replaced with <-
-;;           (lambda ()
-;;             (ess-toggle-underscore nil)))
-;; (define-key ess-r-mode-map "_" #'ess-insert-assign)
-;; (define-key inferior-ess-r-mode-map "_" #'ess-insert-assign)
 
 ;; H/T https://emacs.stackexchange.com/a/8055
 (defun pipe_R_operator ()
@@ -384,8 +376,20 @@ python-shell-completion-string-code
   (insert "%>%")
   ;; (reindent-then-newline-and-indent)
   )
-(define-key ess-mode-map (kbd "C-|") 'pipe_R_operator)
-(define-key inferior-ess-mode-map (kbd "C-|") 'pipe_R_operator)
+
+(use-package ess
+  :config (require 'ess-r-mode)
+  :bind (:map ess-r-mode-map
+              ("C-|" . pipe_R_operator)
+         :map inferior-ess-r-mode-map
+              ("C-|" . pipe_R_operator)))
+;; (setq ess-view--spreadsheet-program "C:/Program Files/LibreOffice 5/program/scalc.exe")
+;; Actually, let's save some keypresses. Improved with ess-smart-underscore
+;; (add-hook 'ess-mode-hook ;; Disable _ being replaced with <-
+;;           (lambda ()
+;;             (ess-toggle-underscore nil)))
+;; (define-key ess-r-mode-map "_" #'ess-insert-assign)
+;; (define-key inferior-ess-r-mode-map "_" #'ess-insert-assign)
 
 ;; Rmarkdown
 (require 'poly-markdown)
