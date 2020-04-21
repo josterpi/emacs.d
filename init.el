@@ -95,29 +95,20 @@
           (left . 50)
           (top . 0))))
 
-(if (display-graphic-p)
-    (if (string= (system-name) "JOSTER") ; Hack to set frame height to 53 on my laptop
-	(set-initial-dimensions 53)
-      (set-initial-dimensions 65)))	; Set frame height to 65 on a 1080p monitor
-
-;; Set up initial frame size
-;; (if (display-graphic-p)
-;;     (progn
-;;       (setq initial-frame-alist
-;;             '(
-;;               (tool-bar-lines . 0)
-;;               (width . 106) ; chars
-;;               (height . 65) ; lines
-;;               (left . 50)
-;;               (top . 0)))
-;;       (setq default-frame-alist
-;;             '(
-;;               (tool-bar-lines . 0)
-;;               (width . 106)
-;;               (height . 65)
-;;               (left . 50)
-;;               (top . 0)))))
-
+;; Now that I'm running an emacs daemon, it's running init without
+;; (display-graphic-p) being true, so my frame size is wrong.
+;; We can use this hook, but it doesn't work for the first frame:
+;; https://www.reddit.com/r/emacs/comments/6lxf9b/question_emacsclient_and_connection_hooks/
+;; We'll just live with this for now:
+(add-hook 'before-make-frame-hook
+          #'(lambda ()
+              (message "BEFORE FRAME HOOK")
+              (if (display-graphic-p)
+                  ;; Hack to set frame height to 53 on my laptop
+                  (if (string= (system-name) "JOSTER")
+	              (set-initial-dimensions 53)
+                    ;; Set frame height to 65 on a 1080p monitor
+                    (set-initial-dimensions 65)))))
 
 (setq abbrev-file-name             ;; tell emacs where to read abbrev
       "~/.emacs.d/abbrev_defs")    ;; definitions from...
