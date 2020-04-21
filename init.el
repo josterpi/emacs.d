@@ -71,6 +71,12 @@
 ;; C-u C-space C-space to repeart popping mark instead of C-u C-space C-u C-space
 (setq set-mark-command-repeat-pop 1)
 
+;; show buffer file name in title bar
+(setq frame-title-format
+      '((:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b"))))
+
 (setq find-program "C:/tools/msys64/usr/bin/find.exe")
 
 (require 'server)
