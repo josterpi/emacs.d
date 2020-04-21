@@ -455,10 +455,13 @@ python-shell-completion-string-code
 (recentf-mode)
 
 ;; Done with IDO for now. Let's try Ivy
-(ivy-mode 1)
-(setq ivy-use-virtual-buffers t)
-(setq ivy-count-format "(%d/%d) ")
-(setq counsel-find-file-ignore-regexp "\\.R~\\'")
+(use-package ivy
+  :custom
+  (ivy-use-virtual-buffers t)
+  (ivy-count-format "(%d/%d) ")
+  (counsel-find-file-ignore-regexp "\\.R~\\'")
+  :config
+  (ivy-mode))
 
 ;; Projectile for projects
 (projectile-mode 1)
