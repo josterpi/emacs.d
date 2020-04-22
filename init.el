@@ -1,4 +1,9 @@
 
+;;;;
+;;;; Setup
+;;;;
+
+;;; Some variables to allow different config between Windows & Linux
 (defvar mswindows-p (string-match "windows" (symbol-name system-type)))
 (defvar linux-p (string-match "linux" (symbol-name system-type)))
 
@@ -34,8 +39,6 @@
 
 ;; To hide minor mode lighters
 (use-package diminish)
-
-(load "help-init") ;; helper functions for some org-mode stuff
 
 ;; https://www.emacswiki.org/emacs/BackToIndentationOrBeginning
 (defun back-to-indentation-or-beginning () (interactive)
@@ -123,6 +126,10 @@
 (when (display-graphic-p)
   (tool-bar-mode -1))
 
+;; to supress ElDoc in mode line
+(eval-after-load "eldoc"
+  '(diminish 'eldoc-mode))
+
 ;; Use my latest version of python-mode
 ;; (setq py-install-directory "~/.emacs.d/python-mode.el-6.1.2")
 ;; (add-to-list 'load-path py-install-directory)
@@ -179,7 +186,8 @@ python-shell-completion-string-code
 (when (executable-find "ipython")
   (setq python-shell-interpreter "ipython"))
 
-; Set up some stuff for org-mode
+;; Set up some stuff for org-mode
+(load "help-init") ;; helper functions for some org-mode stuff
 (setq org-export-backends (quote (ascii html latex icalendar md)))
 (require 'org-install)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -466,16 +474,25 @@ python-shell-completion-string-code
   (ivy-use-virtual-buffers t)
   (ivy-count-format "(%d/%d) ")
   (counsel-find-file-ignore-regexp "\\.R~\\'")
+  :diminish ivy-mode
   :config
   (ivy-mode))
 
 ;; Projectile for projects
-(projectile-mode 1)
-;; I don't currently have Super set up, but it could be the windows key
-;; Use AutoHotKey to set up Windows key as super
-(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(setq projectile-completion-system 'ivy)
+(use-package projectile
+  :after ivy
+  :bind (:map projectile-mode-map
+              ;; AutoHotKey may be set up with the Windows key as super
+              ("s-p" . 'projectile-command-map)
+              ("C-c p" . 'projectile-command-map))
+  :custom
+  (projectile-completion-system 'ivy)
+  :config
+  (projectile-mode 1))
+
+;; (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+;; (setq projectile-completion-system 'ivy)
 
 ;; emmet-mode for amazing html and css
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
@@ -526,7 +543,11 @@ python-shell-completion-string-code
 (setq aw-ignore-current t) ;; Don't have me jump to the window I'm in
 
 ;; Magit
-(global-set-key (kbd "C-x g") 'magit-status)
+(use-package magit
+  :bind ("C-x g" . 'magit-status)
+  :diminish auto-revert-mode
+  )
+;; (global-set-key (kbd "C-x g") 'magit-status)
 
 ;; https://www.emacswiki.org/emacs/EmacsAsDaemon#toc10
 ;; define function to shutdown emacs server instance
