@@ -40,20 +40,12 @@
 ;; To hide minor mode lighters
 (use-package diminish)
 
-;; https://www.emacswiki.org/emacs/BackToIndentationOrBeginning
-(defun back-to-indentation-or-beginning () (interactive)
-       (if (= (point) (progn (back-to-indentation) (point)))
-	   (beginning-of-line)))
-(global-set-key (kbd "<home>") 'back-to-indentation-or-beginning)
-(global-set-key (kbd "C-a") 'back-to-indentation-or-beginning)
+;;;;
+;;;; Minor tweaks to improve emacs
+;;;;
 
-;; http://ergoemacs.org/emacs/emacs_hyper_super_keys.html
-;; make PC keyboard's Win key or other to type Super or Hyper, for emacs running on Windows.
-(setq w32-pass-lwindow-to-system nil)
-(setq w32-lwindow-modifier 'super) ; Left Windows key
-
-(setq w32-pass-rwindow-to-system nil)
-(setq w32-rwindow-modifier 'super) ; Right Windows key
+;; Suppress the welcome screen
+(setq inhibit-startup-message t)
 
 ;; Don't litter my hard drive with backup files
 (setq
@@ -71,8 +63,15 @@
 ;; show cursor position within line
 (column-number-mode 1)
 
+;; Enable narrow-to-region, but I don't know why I'd use it :)
+(put 'narrow-to-region 'disabled nil)
+
 ;; C-u C-space C-space to repeart popping mark instead of C-u C-space C-u C-space
 (setq set-mark-command-repeat-pop 1)
+
+;; Globally Enable hi-lock mode. M-s h . to highlight symbol found
+;; near point. M-s h u to unhighlight something
+(global-hi-lock-mode 1)
 
 ;; show buffer file name in title bar
 (setq frame-title-format
@@ -80,13 +79,25 @@
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
 
+;; https://www.emacswiki.org/emacs/BackToIndentationOrBeginning
+(defun back-to-indentation-or-beginning () (interactive)
+       (if (= (point) (progn (back-to-indentation) (point)))
+	   (beginning-of-line)))
+(global-set-key (kbd "<home>") 'back-to-indentation-or-beginning)
+(global-set-key (kbd "C-a") 'back-to-indentation-or-beginning)
+
+;; http://ergoemacs.org/emacs/emacs_hyper_super_keys.html
+;; make PC keyboard's Win key or other to type Super or Hyper, for emacs running on Windows.
+(setq w32-pass-lwindow-to-system nil)
+(setq w32-lwindow-modifier 'super) ; Left Windows key
+
+(setq w32-pass-rwindow-to-system nil)
+(setq w32-rwindow-modifier 'super) ; Right Windows key
+
 (setq find-program "C:/tools/msys64/usr/bin/find.exe")
 
 (require 'server)
 (unless (server-running-p) (server-start))
-
-;; Suppress the welcome screen
-(setq inhibit-startup-message t)
 
 (defmacro set-initial-dimensions (height-lines)
   `(setq initial-frame-alist
@@ -130,6 +141,31 @@
 (eval-after-load "eldoc"
   '(diminish 'eldoc-mode))
 
+;; H/T https://news.ycombinator.com/item?id=22883750
+;; Handling of spaces
+(setq-default show-trailing-whitespace 't)
+;; H/T https://emacs.stackexchange.com/q/37069/28438
+(defun jo/hide-trailing-whitespace-maybe ()
+  "Disable 'show-trailing-whitespace' in selected modes."
+  (when (derived-mode-p 'shell-mode
+                        'comint-mode
+                        'magit-popup-mode
+                        'tabulated-list-mode)
+    (setq show-trailing-whitespace nil)))
+(add-hook 'after-change-major-mode-hook
+          'jo/hide-trailing-whitespace-maybe)
+(setq-default indicate-empty-lines 't)
+;; try not to use tab characters ever when formatting code
+(setq-default indent-tabs-mode nil)
+(setq-default require-final-newline 'ask)
+(setq-default mode-require-final-newline 'ask)
+
+;;;;
+;;;; Major modes
+;;;;
+
+;;; PYTHON *******************************************************************
+
 ;; Use my latest version of python-mode
 ;; (setq py-install-directory "~/.emacs.d/python-mode.el-6.1.2")
 ;; (add-to-list 'load-path py-install-directory)
@@ -165,10 +201,6 @@
 ;;       (with-current-buffer buf
 ;; 	(kill-ring-save (point-min) (point-max))))))
 
-(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
-(autoload 'csv-mode "csv-mode"
-  "Major mode for editing comma-separated value files." t)
-
 (setq
 ;; python-shell-interpreter-args "-colors NoColor"
 ;; python-shell-prompt-regexp "In \\[[0-9]+\\]: "
@@ -185,6 +217,8 @@ python-shell-completion-string-code
 
 (when (executable-find "ipython")
   (setq python-shell-interpreter "ipython"))
+
+;;; ORG ***********************************************************************
 
 ;; Set up some stuff for org-mode
 (load "help-init") ;; helper functions for some org-mode stuff
@@ -342,45 +376,10 @@ python-shell-completion-string-code
 ;; Don't add id properties to things
 (setq org-mobile-force-id-on-agenda-items nil)
 
-
 ;; virtual indentation according to outline level. by default
 (setq-default org-startup-indented t)
 
-; Use the default web browser
-(when linux-p
-  (setq browse-url-browser-function 'browse-url-generic
-	browse-url-generic-program "gnome-www-browser"))
-
-; On windows, set up paths to get git to work
-(when mswindows-p
-  ;;(setq explicit-shell-file-name
-  ;;    "C:/Program Files (x86)/Git/bin/bash.exe")
-  ;;(setq shell-file-name explicit-shell-file-name)
-  ;(setq default-directory (concat (file-name-as-directory (getenv "UserProfile")) "AppData/Roaming" ))
-  (setq default-directory (getenv "UserProfile"))
-  (setenv "GIT_ASKPASS" "git-gui--askpass") ;; Use GUI to ask for credentials
-  (setenv "SSH_ASKPASS" "git-gui--askpass") ;; Use GUI to ask for SSH key credentials
-  ;;(add-to-list 'exec-path "C:/Program Files (x86)/Git/bin")
-)
-
-(defun jo/git-sync ()
-  "For use with org to synchronize to git repo"
-  (interactive)
-  (let ((system (downcase (system-name))))
-    ;; If git status is not blank, then commit all changed files
-    (if (magit-git-string "status" "-s" "-uno") ; -s(hort) -uno (no unstaged files)
-	(magit-run-git "commit" "-a" (format "--message='%s'" system)))
-    (magit-pull-from-upstream nil)
-    (magit-push-current-to-upstream nil)))
-
-;; Lilypond
-(autoload 'LilyPond-mode "lilypond-mode")
-(setq auto-mode-alist
-      (cons '("\\.ly$" . LilyPond-mode) auto-mode-alist))
-
-(add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
-
-;; ESS
+;;; ESS ***********************************************************************
 
 ;; H/T https://emacs.stackexchange.com/a/8055
 (defun pipe_R_operator ()
@@ -437,6 +436,14 @@ python-shell-completion-string-code
 	      ("warning -- prevent warnings from appearing" . "warning = F"))
 	    :action (lambda (x) (jo/insert-rchunk-header (cdr x)))))
 
+;; When I'm working on R in multiple frames, reuse the R process buffer
+;; if it's anywhere. There appears to be a bug in ESS where it doesn't
+;; go back to the original frame.
+(setq display-buffer-alist
+      `(("*R"
+       (display-buffer-reuse-window)
+       (reusable-frames . visible))))
+
 ;; In Rmarkdown files, insert new R chunks and set their options
 (define-key poly-markdown+r-mode-map (kbd "C-c r") 'jo/insert-r-chunk)
 (define-key poly-markdown+r-mode-map (kbd "C-c h") 'jo/select-rchunk-header)
@@ -452,14 +459,52 @@ python-shell-completion-string-code
        'comint-next-matching-input-from-input)
      ))
 
+;;;;
+;;;; Less big packages and configuration
+;;;;
+
+; Use the default web browser
+(when linux-p
+  (setq browse-url-browser-function 'browse-url-generic
+	browse-url-generic-program "gnome-www-browser"))
+
+; On windows, set up paths to get git to work
+(when mswindows-p
+  ;;(setq explicit-shell-file-name
+  ;;    "C:/Program Files (x86)/Git/bin/bash.exe")
+  ;;(setq shell-file-name explicit-shell-file-name)
+  ;(setq default-directory (concat (file-name-as-directory (getenv "UserProfile")) "AppData/Roaming" ))
+  (setq default-directory (getenv "UserProfile"))
+  (setenv "GIT_ASKPASS" "git-gui--askpass") ;; Use GUI to ask for credentials
+  (setenv "SSH_ASKPASS" "git-gui--askpass") ;; Use GUI to ask for SSH key credentials
+  ;;(add-to-list 'exec-path "C:/Program Files (x86)/Git/bin")
+)
+
+(defun jo/git-sync ()
+  "For use with org to synchronize to git repo"
+  (interactive)
+  (let ((system (downcase (system-name))))
+    ;; If git status is not blank, then commit all changed files
+    (if (magit-git-string "status" "-s" "-uno") ; -s(hort) -uno (no unstaged files)
+	(magit-run-git "commit" "-a" (format "--message='%s'" system)))
+    (magit-pull-from-upstream nil)
+    (magit-push-current-to-upstream nil)))
+
+;; CSV-mode
+(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+(autoload 'csv-mode "csv-mode"
+  "Major mode for editing comma-separated value files." t)
+
+;; Lilypond
+(autoload 'LilyPond-mode "lilypond-mode")
+(setq auto-mode-alist
+      (cons '("\\.ly$" . LilyPond-mode) auto-mode-alist))
+
+(add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
+
 ;; hunspell
 (add-to-list 'exec-path "C:/hunspell/bin/")
 (setq ispell-program-name "hunspell")
-
-;; IDO
-;; (require 'ido)
-;; (ido-mode t)
-;; (setq ido-create-new-buffer 'always) ; Don't ask for confirmation
 
 ;; ivy is already enabling recentf for virtual buffers, but I want to
 ;; increase the number of items saved and exclude org-mode archives
@@ -490,16 +535,9 @@ python-shell-completion-string-code
   :config
   (projectile-mode 1))
 
-;; (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-;; (setq projectile-completion-system 'ivy)
-
 ;; emmet-mode for amazing html and css
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-
-;; Globally Enable hi-lock mode. M-s h . to highlight symbol found near point. M-s h u to unhighlight something
-(global-hi-lock-mode 1)
 
 ;; Enable company-mode everywhere
 (add-hook 'after-init-hook 'global-company-mode)
@@ -512,28 +550,6 @@ python-shell-completion-string-code
 (require 'dired-details)
 (dired-details-install)
 (setq dired-details-hidden-string "")
-
-;; Enable narrow-to-region, but I don't know why I'd use it :)
-(put 'narrow-to-region 'disabled nil)
-
-;; H/T https://news.ycombinator.com/item?id=22883750
-;; Handling of spaces
-(setq-default show-trailing-whitespace 't)
-;; H/T https://emacs.stackexchange.com/q/37069/28438
-(defun jo/hide-trailing-whitespace-maybe ()
-  "Disable 'show-trailing-whitespace' in selected modes."
-  (when (derived-mode-p 'shell-mode
-                        'comint-mode
-                        'magit-popup-mode
-                        'tabulated-list-mode)
-    (setq show-trailing-whitespace nil)))
-(add-hook 'after-change-major-mode-hook
-          'jo/hide-trailing-whitespace-maybe)
-(setq-default indicate-empty-lines 't)
-;; try not to use tab characters ever when formatting code
-(setq-default indent-tabs-mode nil)
-(setq-default require-final-newline 'ask)
-(setq-default mode-require-final-newline 'ask)
 
 ;; ACE jump and window settings
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
