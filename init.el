@@ -572,6 +572,9 @@ python-shell-completion-string-code
 (defun server-shutdown ()
   "Save buffers, Quit, and Shutdown (kill) server"
   (interactive)
-  (save-some-buffers)
-  (kill-emacs)
+  (if (y-or-n-p "Kill all emacs and server? ")
+      (progn
+        (save-some-buffers)
+        (kill-emacs)))
   )
+(global-set-key (kbd "C-x C-c") 'server-shutdown)
