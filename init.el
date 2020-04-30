@@ -484,7 +484,8 @@ python-shell-completion-string-code
   (setenv "SSH_ASKPASS" "git-gui--askpass") ;; Use GUI to ask for SSH key credentials
   ;;(add-to-list 'exec-path "C:/Program Files (x86)/Git/bin")
   (setq directory-abbrev-alist
-        '(("^c:/Users/josterhouse/OneDrive - LaSalle Company, Inc/Documents" . "~/docs")))
+        '(("^OneDrive - LaSalle Company, Inc/Documents" .
+           "c:/Users/josterhouse/docs")))
 )
 
 (defun jo/git-sync ()
