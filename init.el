@@ -530,6 +530,14 @@ python-shell-completion-string-code
   :config
   (ivy-mode))
 
+(use-package swiper
+  :after ivy
+  :bind ("C-s" . swiper))
+
+(use-package counsel
+  :after ivy
+  :config (counsel-mode))
+
 ;; Projectile for projects
 (use-package projectile
   :after ivy
