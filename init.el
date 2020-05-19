@@ -384,21 +384,25 @@ python-shell-completion-string-code
 
 ;;; ESS ***********************************************************************
 
-;; H/T https://emacs.stackexchange.com/a/8055
-(defun pipe_R_operator ()
-  "R - %>% operator or 'then' pipe operator"
-  (interactive)
-  (just-one-space 1)
-  (insert "%>%")
-  ;; (reindent-then-newline-and-indent)
-  )
 
 (use-package ess
-  :config (require 'ess-r-mode)
+  :init (require 'ess-site)
+  ;; :mode "\\.R\\'"
+  :defer 5
   :bind (:map ess-r-mode-map
               ("C-|" . pipe_R_operator)
          :map inferior-ess-r-mode-map
-              ("C-|" . pipe_R_operator)))
+         ("C-|" . pipe_R_operator))
+  :preface
+  ;; H/T https://emacs.stackexchange.com/a/8055
+  (defun pipe_R_operator ()
+    "R - %>% operator or 'then' pipe operator"
+    (interactive)
+    (just-one-space 1)
+    (insert "%>%")
+    ;; (reindent-then-newline-and-indent)
+    )
+  )
 ;; (setq ess-view--spreadsheet-program "C:/Program Files/LibreOffice 5/program/scalc.exe")
 ;; Actually, let's save some keypresses. Improved with ess-smart-underscore
 ;; (add-hook 'ess-mode-hook ;; Disable _ being replaced with <-
@@ -408,39 +412,44 @@ python-shell-completion-string-code
 ;; (define-key inferior-ess-r-mode-map "_" #'ess-insert-assign)
 
 ;; Rmarkdown
-(use-package poly-markdown)
+(use-package poly-markdown
+  :defer t)
 (use-package poly-R
+  :defer t
   :after poly-markdown
   :config
-  (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode)))
+  (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+  :preface
+  ;; H/T https://emacs.stackexchange.com/a/27419/28438
+  (defun jo/insert-r-chunk ()
+    "Insert an R chunk in Rmarkdown"
+    (interactive)
+    (insert "```{r}\n\n```")
+    (forward-line -1))
 
+  (defun jo/insert-rchunk-header (option)
+    "Add an R chunk header option"
+    (save-excursion
+      (search-backward "`{r")
+      (move-end-of-line 1)
+      (backward-char)
+      (insert (concat ", " option))))
 
-;; H/T https://emacs.stackexchange.com/a/27419/28438
-(defun jo/insert-r-chunk ()
-  "Insert an R chunk in Rmarkdown"
-  (interactive)
-  (insert "```{r}\n\n```")
-  (forward-line -1))
-
-(defun jo/insert-rchunk-header (option)
-  "Add an R chunk header option"
-  (save-excursion
-    (search-backward "`{r")
-    (move-end-of-line 1)
-    (backward-char)
-    (insert (concat ", " option))))
-
-(defun jo/select-rchunk-header ()
-  "Using ivy, select an R chunk header option, which is then inserted"
-  (interactive)
-  (ivy-read "Chunk options: "
-	    '(("include -- prevent code & results from appearing" . "include = F")
-	      ("echo -- prevent code, but show results" . "echo = F")
-	      ("eval -- don't run the code" . "eval = F")
-	      ("cache -- cache results for future knits" . "cache = T")
-	      ("message -- prevent messages from appearing" . "message = F")
-	      ("warning -- prevent warnings from appearing" . "warning = F"))
-	    :action (lambda (x) (jo/insert-rchunk-header (cdr x)))))
+  (defun jo/select-rchunk-header ()
+    "Using ivy, select an R chunk header option, which is then inserted"
+    (interactive)
+    (ivy-read "Chunk options: "
+	      '(("include -- prevent code & results from appearing" . "include = F")
+	        ("echo -- prevent code, but show results" . "echo = F")
+	        ("eval -- don't run the code" . "eval = F")
+	        ("cache -- cache results for future knits" . "cache = T")
+	        ("message -- prevent messages from appearing" . "message = F")
+	        ("warning -- prevent warnings from appearing" . "warning = F"))
+	      :action (lambda (x) (jo/insert-rchunk-header (cdr x)))))
+  ;; In Rmarkdown files, insert new R chunks and set their options
+  :bind (:map poly-markdown+r-mode-map
+              ("C-c r" . 'jo/insert-r-chunk)
+              ("C-c h" . 'jo/select-rchunk-header)))
 
 ;; When I'm working on R in multiple frames, reuse the R process buffer
 ;; if it's anywhere. There appears to be a bug in ESS where it doesn't
@@ -449,10 +458,6 @@ python-shell-completion-string-code
       `(("*R"
        (display-buffer-reuse-window)
        (reusable-frames . visible))))
-
-;; In Rmarkdown files, insert new R chunks and set their options
-(define-key poly-markdown+r-mode-map (kbd "C-c r") 'jo/insert-r-chunk)
-(define-key poly-markdown+r-mode-map (kbd "C-c h") 'jo/select-rchunk-header)
 
 ;; http://ess.r-project.org/Manual/ess.html#Command-History
 ;; For R and any other comint buffers: type a prefix and search for matches
@@ -555,10 +560,11 @@ python-shell-completion-string-code
 ;; Projectile for projects
 (use-package projectile
   :after ivy
-  :bind (:map projectile-mode-map
+  :defer 5
+  :bind-keymap*
               ;; AutoHotKey may be set up with the Windows key as super
-              ("s-p" . 'projectile-command-map)
-              ("C-c p" . 'projectile-command-map))
+              (("s-p" . projectile-command-map)
+              ("C-c p" . projectile-command-map))
   :custom
   (projectile-completion-system 'ivy)
   :config
@@ -596,8 +602,9 @@ python-shell-completion-string-code
 
 ;; Magit
 (use-package magit
+  :defer t
   :bind ("C-x g" . 'magit-status)
-  :diminish auto-revert-mode
+  :diminish 'auto-revert-mode
   )
 ;; (global-set-key (kbd "C-x g") 'magit-status)
 
