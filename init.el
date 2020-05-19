@@ -287,7 +287,7 @@ python-shell-completion-string-code
 ;; Set the agenda files, concating org-directory since it's different
 ;; between linux and windows
 (setq org-agenda-files
-   (mapcar '(lambda (file) (concat org-directory file))
+   (mapcar #'(lambda (file) (concat org-directory file))
     '("/personal.org" "/work.org" "/house.org" "/inbox.org")))
 
 ;; Custom Agenda: http://doc.norang.ca/org-mode.html#CustomAgendaViewSetup
