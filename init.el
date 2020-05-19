@@ -594,3 +594,15 @@ python-shell-completion-string-code
         (kill-emacs)))
   )
 (global-set-key (kbd "C-x C-c") 'server-shutdown)
+
+;; H/T https://www.reddit.com/r/emacs/comments/6zvw4d/dmyhd9y/
+;; Scroll grep buffer past super-long find command
+(defun jo/rgrep-skip-gibberish-hook (&rest _)
+  (when isearch-mode (isearch-exit))
+  (select-window (get-buffer-window "*grep*"))
+  (goto-char (point-min))
+  (next-logical-line 4)
+  (recenter 0)
+  (select-window (next-window)))
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html
+(advice-add 'rgrep :after #'jo/rgrep-skip-gibberish-hook)
