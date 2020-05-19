@@ -540,6 +540,17 @@ python-shell-completion-string-code
   :after ivy
   :config (counsel-mode))
 
+;; H/T https://emacs.stackexchange.com/a/17671/28438
+(defun jo/describe-char-at-mouse (event)
+  (interactive "e")
+  (let* ((mouse-pos  (event-start event))
+         (pos-pt     (posn-point mouse-pos)))
+    (describe-char pos-pt)))
+
+;; C-mouse-1
+(global-set-key [(control down-mouse-1)] 'ignore)
+(global-set-key [(control mouse-1)] 'jo/describe-char-at-mouse)
+
 ;; Projectile for projects
 (use-package projectile
   :after ivy
