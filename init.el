@@ -303,7 +303,7 @@ python-shell-completion-string-code
                ((tags "REFILE"
                       ((org-agenda-overriding-header "Tasks to Refile")
                        (org-tags-match-list-sublevels nil)))))
-              (" " "Agenda"
+              ("\\" "Agenda"
                ((agenda "" nil)
                 (tags "REFILE"
                       ((org-agenda-overriding-header "Tasks to Refile")
@@ -362,10 +362,11 @@ python-shell-completion-string-code
                             (org-tags-match-list-sublevels nil)
                             (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
                             (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)))
-                (tags "-REFILE/"
+                (todo "DONE"
                       ((org-agenda-overriding-header "Tasks to Archive")
-                       (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
-                       (org-tags-match-list-sublevels nil))))
+                       ;; (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
+                       ;; (org-tags-match-list-sublevels nil)
+                       )))
                nil))))
 
 ;; http://nflath.com/2010/03/org-mode-2/
