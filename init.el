@@ -570,11 +570,17 @@ python-shell-completion-string-code
 (setq dired-details-hidden-string "")
 
 ;; ACE jump and window settings
-(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-(global-set-key (kbd "C-x o") 'ace-window)
-(global-set-key (kbd "M-o") 'other-window)
-(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)) ;; Use the home row for ace-window
-(setq aw-ignore-current t) ;; Don't have me jump to the window I'm in
+(use-package ace-jump-mode
+  :bind ("C-c SPC" . 'ace-jump-mode))
+;; (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+(use-package ace-window
+  :bind (("C-x o" . 'ace-window)
+         ("M-o" . 'other-window))
+  :custom
+  ;; Use the home row for ace-window
+  (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  ;; Don't have me jump to the window I'm in
+  (aw-ignore-current t))
 
 ;; Magit
 (use-package magit
