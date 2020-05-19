@@ -30,10 +30,12 @@
 
 ;; Use Package ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
 (setq use-package-verbose t)
 (setq use-package-always-ensure t)
-(require 'use-package)
+(eval-when-compile
+  (require 'use-package))
 ;; (use-package auto-compile
   ;; :config (auto-compile-on-load-mode))
 
@@ -405,9 +407,12 @@ python-shell-completion-string-code
 ;; (define-key inferior-ess-r-mode-map "_" #'ess-insert-assign)
 
 ;; Rmarkdown
-(require 'poly-markdown)
-(require 'poly-R)
-(add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+(use-package poly-markdown)
+(use-package poly-R
+  :after poly-markdown
+  :config
+  (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode)))
+
 
 ;; H/T https://emacs.stackexchange.com/a/27419/28438
 (defun jo/insert-r-chunk ()
@@ -541,8 +546,9 @@ python-shell-completion-string-code
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
 
-;; Enable company-mode everywhere
-(add-hook 'after-init-hook 'global-company-mode)
+(use-package company
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
 
 ;; jump-char: like f and F in vim
 (global-set-key (kbd "M-m") 'jump-char-forward)
