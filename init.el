@@ -538,6 +538,7 @@ python-shell-completion-string-code
 
 (use-package counsel
   :after ivy
+  :diminish counsel-mode
   :config (counsel-mode))
 
 ;; H/T https://emacs.stackexchange.com/a/17671/28438
