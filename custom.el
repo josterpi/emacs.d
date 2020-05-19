@@ -35,4 +35,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Hack" :foundry "outline" :slant normal :weight normal :height 98 :width normal))))
- '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
+ '(ivy-highlight-face ((t (:inherit highlight :background "dark sea green")))))
