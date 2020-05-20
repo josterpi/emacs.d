@@ -579,18 +579,28 @@ python-shell-completion-string-code
   (add-hook 'after-init-hook 'global-company-mode))
 
 ;; jump-char: like f and F in vim
-(global-set-key (kbd "M-m") 'jump-char-forward)
-(global-set-key (kbd "M-M") 'jump-char-backward)
+(use-package jump-char
+  :bind (("M-m" . 'jump-char-forward)
+         ("M-M" . 'jump-char-backward)))
 
-;; hide extraneous info from dired. Show/hide with '(' and ')'
-(require 'dired-details)
-(dired-details-install)
-(setq dired-details-hidden-string "")
+;; Automatically hide details. '(' to toggle hide/show details
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (dired-hide-details-mode)
+            (dired-sort-toggle-or-edit)))
+
+(use-package dired-subtree
+  :ensure t
+  :bind (:map dired-mode-map
+              ("i" . dired-subtree-insert)
+              (";" . dired-subtree-remove)
+              ("<tab>" . dired-subtree-toggle)
+              ("<backtab>" . dired-subtree-cycle)))
 
 ;; ACE jump and window settings
 (use-package ace-jump-mode
   :bind ("C-c SPC" . 'ace-jump-mode))
-;; (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
 (use-package ace-window
   :bind (("C-x o" . 'ace-window)
          ("M-o" . 'other-window))
