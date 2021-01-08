@@ -96,7 +96,8 @@
 (setq w32-pass-rwindow-to-system nil)
 (setq w32-rwindow-modifier 'super) ; Right Windows key
 
-(setq find-program "C:/tools/msys64/usr/bin/find.exe")
+(when mswindows-p
+  (setq find-program "C:/tools/msys64/usr/bin/find.exe"))
 
 (require 'server)
 (unless (server-running-p) (server-start))
@@ -214,11 +215,37 @@ python-shell-completion-module-string-code
 python-shell-completion-string-code
   "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"
   )
+
+(when mswindows-p
+  (setq py-python2-command "C:/Python27/python"
+        py-python3-command "C:/Python36/python"
+        py-shell-toggle-2 "C:/Python36/python"))
 ;; (setq-default py-shell-name "ipython")
 ;; (setq-default py-which-bufname "IPython")
 
-(when (executable-find "ipython")
-  (setq python-shell-interpreter "ipython"))
+(setq python-shell-interpreter "python3")
+(setq python-environment-virtualenv (quote ("python3" "-m" "venv")))
+
+(when (executable-find "ipython3")
+  (setq python-shell-interpreter "ipython3"))
+
+(use-package company-jedi
+  :ensure t
+  :config
+  :hook
+  ((python-mode . jedi:setup))
+  :init
+  (setq jedi:complete-on-dot t)
+  ;;(setq jedi:use-shortcuts t)
+  (add-hook 'python-mode-hook
+            (lambda () (add-to-list 'company-backends 'company-jedi))))
+
+(use-package elpy
+  :defer t
+  :init
+  (advice-add 'python-mode :before 'elpy-enable)
+  :custom
+  (elpy-rpc-python-command "python3"))
 
 ;;; ORG ***********************************************************************
 
@@ -517,7 +544,8 @@ python-shell-completion-string-code
 (add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
 
 ;; hunspell
-(add-to-list 'exec-path "C:/hunspell/bin/")
+(when mswindows-p
+  (add-to-list 'exec-path "C:/hunspell/bin/"))
 (setq ispell-program-name "hunspell")
 
 ;; ivy is already enabling recentf for virtual buffers, but I want to
@@ -571,8 +599,20 @@ python-shell-completion-string-code
   (projectile-mode 1))
 
 ;; emmet-mode for amazing html and css
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(use-package emmet-mode
+  :hook
+  ((sgml-mode-hook . emmet-mode)
+   (css-mode-hook . emmet-mode)))
+
+(use-package web-mode
+  :mode ("\\.html$" . web-mode)
+  :preface
+  ;; H/T https://emacs.stackexchange.com/a/32659/28438
+  (defun cesco/django ()
+    (if (projectile-project-p)
+        (if (file-exists-p (concat (projectile-project-root) "manage.py"))
+            (web-mode-set-engine "django"))))
+  :hook (web-mode . cesco/django))
 
 (use-package company
   :config
@@ -641,3 +681,6 @@ python-shell-completion-string-code
   (select-window (next-window)))
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html
 (advice-add 'rgrep :after #'jo/rgrep-skip-gibberish-hook)
+
+(use-package yaml-mode
+  :mode ("\\.yml$" . yaml-mode))
