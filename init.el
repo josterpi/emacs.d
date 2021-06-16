@@ -536,6 +536,13 @@ python-shell-completion-string-code
 (autoload 'csv-mode "csv-mode"
   "Major mode for editing comma-separated value files." t)
 
+;; JQ mode for json. Installed for use with restclient
+(use-package jq-mode)
+
+;; REST-client
+(use-package restclient
+  :mode ("\\.http\\'" . restclient-mode))
+
 ;; Lilypond
 (autoload 'LilyPond-mode "lilypond-mode")
 (setq auto-mode-alist
