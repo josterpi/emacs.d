@@ -269,7 +269,7 @@ python-shell-completion-string-code
   ;; goes to wherever my Windows Documents folder is. Currently,
   ;; that's in OneDrive, so it's really obnoxious to navigate to on
   ;; the CL
-  (setq org-directory "~/docs/org"))
+  (setq org-directory "~/org"))
 
 ;; Use org-habit, only because norang depends on it for now
 (add-to-list 'org-modules 'org-habit)
