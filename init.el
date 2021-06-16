@@ -96,6 +96,8 @@
 (setq w32-pass-rwindow-to-system nil)
 (setq w32-rwindow-modifier 'super) ; Right Windows key
 
+(global-auto-revert-mode t)
+
 (when mswindows-p
   (setq find-program "C:/tools/msys64/usr/bin/find.exe"))
 
