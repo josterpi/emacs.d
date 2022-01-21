@@ -583,6 +583,11 @@ python-shell-completion-string-code
   :diminish counsel-mode
   :config (counsel-mode))
 
+(use-package avy
+  :ensure t
+  :bind (("M-s" . avy-goto-char-timer)))
+
+
 ;; H/T https://emacs.stackexchange.com/a/17671/28438
 (defun jo/describe-char-at-mouse (event)
   (interactive "e")
