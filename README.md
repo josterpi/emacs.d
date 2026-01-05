@@ -4,6 +4,14 @@
 
 My .emacs.d folder
 
+## Windows installation
+
+ - Install Emacs with chocolatey.
+ - Clone emacs.d repo in home directory.
+ - Set HOME environment variable to %USERPROFILE% and logout/login
+ - Clone org repo.
+ - The default font is currently specifed as Hack in custom.el. `choco install hackfont`
+
 ## Other emacs configs to check out ##
 
  - https://pages.sachachua.com/.emacs.d/Sacha.html
