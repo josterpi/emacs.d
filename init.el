@@ -166,9 +166,10 @@
 (setq-default require-final-newline 'ask)
 (setq-default mode-require-final-newline 'ask)
 
+;; SETUP: choco install adobe-source-sans
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "Calibri" :height 120 :weight thin))))
+ '(variable-pitch ((t (:family "SourceSans3VF" :height 120))))
  '(fixed-pitch ((t ( :family "Hack" :height 120)))))
 
 ;;;;
@@ -281,11 +282,11 @@ python-shell-completion-string-code
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 (let* ((variable-tuple
-        (cond ((x-list-fonts "Verdana")         '(:font "Verdana"))
-              ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+        (cond ((x-list-fonts "DejaVu Sans")         '(:font "DejaVu Sans"))
+              ((x-list-fonts "SourceSans3VF") '(:font "SourceSans3VF"))
               ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-              ((x-list-fonts "Verdana")         '(:font "Verdana"))
-              ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+              ;;((x-list-fonts "Verdana")         '(:font "Verdana"))
+              ;;((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
               (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
        (base-font-color     (face-foreground 'default nil 'default))
        (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
@@ -619,6 +620,18 @@ python-shell-completion-string-code
 (when mswindows-p
   (add-to-list 'exec-path "C:/hunspell/bin/"))
 (setq ispell-program-name "hunspell")
+;; In Windows, moving toward using WSL for linux-native programs.
+;; SETUP: instal WSL, install hunspell in WSL
+;;        Add bat files in C:\wsl-bin
+(when mswindows-p
+  (add-to-list 'exec-path "C:/wsl-bin")
+  (setenv "PATH" (concat "C:\\wsl-bin;" (getenv "PATH")))
+  (setq ispell-program-name "hunspell")
+  (setq ispell-alternate-dictionary "//wsl$/Ubuntu/usr/share/dict/words")
+
+  ;; Configure grep for Unix-style
+  (setq grep-use-null-device nil)
+  (setq null-device "/dev/null"))
 
 ;; ivy is already enabling recentf for virtual buffers, but I want to
 ;; increase the number of items saved and exclude org-mode archives
@@ -693,6 +706,7 @@ python-shell-completion-string-code
 
 (use-package company
   :config
+  (setq company-backends (delete 'company-ispell company-backends))
   (add-hook 'after-init-hook 'global-company-mode))
 
 ;; jump-char: like f and F in vim
