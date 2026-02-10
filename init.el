@@ -707,7 +707,11 @@ python-shell-completion-string-code
 (use-package company
   :config
   (setq company-backends (delete 'company-ispell company-backends))
-  (add-hook 'after-init-hook 'global-company-mode))
+  (add-hook 'after-init-hook 'global-company-mode)
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (setq-local company-backends
+                          (delete 'company-capf company-backends)))))
 
 ;; jump-char: like f and F in vim
 (use-package jump-char
