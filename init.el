@@ -26,9 +26,6 @@
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
 
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
-
 ;; Use Package ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -42,6 +39,27 @@
 
 ;; To hide minor mode lighters
 (use-package diminish)
+
+;; Used to be in custom.el
+(custom-set-variables
+ '(ansi-color-names-vector
+   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
+ '(csv-separators '("," "|"))
+ '(custom-enabled-themes '(tsdh-dark))
+ '(dired-listing-switches "-alh")
+ '(ess-R-font-lock-keywords
+   '((ess-R-fl-keyword:keywords . t) (ess-R-fl-keyword:constants . t)
+     (ess-R-fl-keyword:modifiers . t) (ess-R-fl-keyword:fun-defs . t)
+     (ess-R-fl-keyword:assign-ops . t) (ess-R-fl-keyword:%op% . t)
+     (ess-fl-keyword:fun-calls) (ess-fl-keyword:numbers . t)
+     (ess-fl-keyword:operators . t) (ess-fl-keyword:delimiters . t)
+     (ess-fl-keyword:=) (ess-R-fl-keyword:F&T)))
+ '(package-selected-packages nil)
+ '(safe-local-variable-values
+   '((eval face-remap-add-relative 'default :family "Calibri")
+     (buffer-face-mode-face :family "Calibri" :height 120)
+     (buffer-face-mode-face :family "Ariel" :height 120)))
+ '(tool-bar-mode nil))
 
 ;;;;
 ;;;; Minor tweaks to improve emacs
@@ -167,10 +185,11 @@
 (setq-default mode-require-final-newline 'ask)
 
 ;; SETUP: choco install adobe-source-sans
-(custom-theme-set-faces
- 'user
- '(variable-pitch ((t (:family "SourceSans3VF" :height 120))))
- '(fixed-pitch ((t ( :family "Hack" :height 120)))))
+(custom-set-faces
+ '(default ((t (:family "Hack" :foundry "outline" :slant normal :weight normal :height 98 :width normal))))
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
+ '(fixed-pitch ((t (:family "Hack" :height 160))))
+ '(ivy-highlight-face ((t (:inherit highlight :background "dark sea green")))))
 
 ;;;;
 ;;;; Major modes
@@ -474,6 +493,23 @@ python-shell-completion-string-code
 (setq-default org-startup-indented t
               org-adapt-indentation t
               org-indent-indentation-per-level 3)
+
+(defun my/journal-insert-today ()
+  "Append a new day entry at level 2 and a blank level 3."
+  (interactive)
+  (unless (derived-mode-p 'org-mode)
+    (user-error "Not in an Org buffer"))
+
+  (goto-char (point-max))
+  (unless (bolp)
+    (insert "\n"))
+
+  ;; Insert explicit level-2 heading
+  (insert "** " (format-time-string "%Y-%m-%d %A") "\n")
+  (insert "*** ")
+)
+
+(define-key global-map (kbd "C-c j") #'my/journal-insert-today)
 
 ;;; ESS ***********************************************************************
 
