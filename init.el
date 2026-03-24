@@ -507,9 +507,26 @@ python-shell-completion-string-code
   ;; Insert explicit level-2 heading
   (insert "** " (format-time-string "%Y-%m-%d %A") "\n")
   (insert "*** ")
-)
+  )
 
-(define-key global-map (kbd "C-c j") #'my/journal-insert-today)
+(defun my/org-journal-new-entry ()
+  "Insert a new 3rd-level journal entry at the end of the current Org file.
+and leaves point after the stars, ready for the headline text."
+  (interactive)
+  (unless (derived-mode-p 'org-mode)
+    (user-error "This function only works in Org mode"))
+
+  (goto-char (point-max))
+  (unless (bolp)
+    (insert "\n"))
+  (insert "*** \n")
+  (insert (format-time-string "[%Y-%m-%d %a %H:%M]\n"))
+  (forward-line -2)
+  (end-of-line))
+
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c J") #'my/journal-insert-today)
+  (define-key org-mode-map (kbd "C-c j") #'my/org-journal-new-entry))
 
 ;;; ESS ***********************************************************************
 
