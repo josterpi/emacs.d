@@ -189,7 +189,11 @@
  '(default ((t (:family "Hack" :foundry "outline" :slant normal :weight normal :height 98 :width normal))))
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
  '(fixed-pitch ((t (:family "Hack" :height 160))))
- '(ivy-highlight-face ((t (:inherit highlight :background "dark sea green")))))
+ '(ivy-highlight-face ((t (:inherit highlight :background "dark sea green"))))
+ '(org-level-1 ((t (:inherit default :weight bold :height 1.5))))
+ '(org-level-2 ((t (:inherit default :weight bold :height 1.25))))
+ '(org-level-3 ((t (:inherit default :weight bold :height 1.1))))
+ )
 
 ;;;;
 ;;;; Major modes
@@ -297,49 +301,49 @@ python-shell-completion-string-code
 
 ;; Hide /.../ and *...*
 (setq org-hide-emphasis-markers t)
-(use-package org-bullets
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-(let* ((variable-tuple
-        (cond ((x-list-fonts "DejaVu Sans")         '(:font "DejaVu Sans"))
-              ((x-list-fonts "SourceSans3VF") '(:font "SourceSans3VF"))
-              ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-              ;;((x-list-fonts "Verdana")         '(:font "Verdana"))
-              ;;((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-              (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-       (base-font-color     (face-foreground 'default nil 'default))
-       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+;; (use-package org-bullets
+;;   :config
+;;   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+;; (let* ((variable-tuple
+;;         (cond ((x-list-fonts "DejaVu Sans")         '(:font "DejaVu Sans"))
+;;               ((x-list-fonts "SourceSans3VF") '(:font "SourceSans3VF"))
+;;               ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+;;               ;;((x-list-fonts "Verdana")         '(:font "Verdana"))
+;;               ;;((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+;;               (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+;;        (base-font-color     (face-foreground 'default nil 'default))
+;;        (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
 
-  (custom-theme-set-faces
-   'user
-   `(org-level-8 ((t (,@headline ,@variable-tuple))))
-   `(org-level-7 ((t (,@headline ,@variable-tuple))))
-   `(org-level-6 ((t (,@headline ,@variable-tuple))))
-   `(org-level-5 ((t (,@headline ,@variable-tuple))))
-   `(org-level-4 ((t (,@headline ,@variable-tuple :height 1))))
-   `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.1))))
-   `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.25))))
-   `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.5))))
-   `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+;;   (custom-theme-set-faces
+;;    'user
+;;    `(org-level-8 ((t (,@headline ,@variable-tuple))))
+;;    `(org-level-7 ((t (,@headline ,@variable-tuple))))
+;;    `(org-level-6 ((t (,@headline ,@variable-tuple))))
+;;    `(org-level-5 ((t (,@headline ,@variable-tuple))))
+;;    `(org-level-4 ((t (,@headline ,@variable-tuple :height 1))))
+;;    `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.1))))
+;;    `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.25))))
+;;    `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.5))))
+;;    `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
 
 ;; Tweak the fonts for some particular areas to use fixed-pitch font
-(custom-theme-set-faces
- 'user
- '(org-block ((t (:inherit fixed-pitch))))
- '(org-code ((t (:inherit (shadow fixed-pitch)))))
- '(org-document-info ((t (:foreground "dark orange"))))
- '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
- '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
- '(org-link ((t (:foreground "royal blue" :underline t))))
- '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-property-value ((t (:inherit fixed-pitch))) t)
- '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
- '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+;; (custom-theme-set-faces
+;;  'user
+;;  '(org-block ((t (:inherit fixed-pitch))))
+;;  '(org-code ((t (:inherit (shadow fixed-pitch)))))
+;;  '(org-document-info ((t (:foreground "dark orange"))))
+;;  '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+;;  '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+;;  '(org-link ((t (:foreground "royal blue" :underline t))))
+;;  '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+;;  '(org-property-value ((t (:inherit fixed-pitch))) t)
+;;  '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+;;  '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+;;  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+;;  '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 
 ;; Use non-monospaced font for org
-(add-hook 'org-mode-hook 'variable-pitch-mode)
+;; (add-hook 'org-mode-hook 'variable-pitch-mode)
 
 ;; Align tags right next to the headline. Helpful for variable-pitch-mode
 (setq org-tags-column 50)
