@@ -747,6 +747,19 @@ python-shell-completion-string-code
   :bind ("C-x g" . 'magit-status)
   :diminish 'auto-revert-mode
   )
+
+;; Ledger Mode
+(use-package hledger-mode
+  :ensure t
+  :mode ("\\.journal\\'" "\\.hledger\\'")
+  :init
+  (setq hledger-jfile "~/path/to/your/journal-file.journal")
+  :bind (("C-c j" . hledger-run-command)
+         :map hledger-mode-map
+         ("C-c e" . hledger-jentry)
+         ("M-p" . hledger-backward-entry)
+         ("M-n" . hledger-next-or-new-entry)))
+
 ;; (global-set-key (kbd "C-x g") 'magit-status)
 
 ;; https://www.emacswiki.org/emacs/EmacsAsDaemon#toc10
