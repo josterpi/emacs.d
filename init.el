@@ -190,8 +190,8 @@
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
  '(fixed-pitch ((t (:family "Hack" :height 160))))
  '(ivy-highlight-face ((t (:inherit highlight :background "dark sea green"))))
- '(org-level-1 ((t (:inherit default :weight bold :height 1.5))))
- '(org-level-2 ((t (:inherit default :weight bold :height 1.25))))
+ '(org-level-1 ((t (:inherit default :weight bold :height 1.5 :foreground "DarkSlateGray1"))))
+ '(org-level-2 ((t (:inherit default :weight bold :height 1.25 :foreground "bisque1"))))
  '(org-level-3 ((t (:inherit default :weight bold :height 1.1))))
  )
 
